@@ -27,7 +27,7 @@
 
       try {
         // Set initial image
-        fabric.Image.fromURL('../img/background.png', function (background) {
+        fabric.Image.fromURL('/img/background.png', function (background) {
           fabricCanvas.setBackgroundImage(
             background,
             fabricCanvas.renderAll.bind(fabricCanvas),

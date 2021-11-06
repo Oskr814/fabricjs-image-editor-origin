@@ -177,7 +177,7 @@
                     backgroundColor: 'white',
                   });
                   fabric.Image.fromURL(
-                    '../img/background.png',
+                    '/img/background.png',
                     function (background) {
                       _self.canvas.setBackgroundImage(
                         background,
