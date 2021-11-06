@@ -311,7 +311,7 @@ async function verifyToken() {
   const token = localStorage.getItem('token');
 
   try {
-    const response = await fetch('https://redmotoshn.com/api/v1/auth/user', {
+    const response = await fetch('https://motos.redmotoshn.com/api/v1/auth/user', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
