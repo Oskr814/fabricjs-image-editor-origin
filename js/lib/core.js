@@ -308,7 +308,7 @@
 })();
 
 async function verifyToken() {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
 
   try {
     const response = await fetch('https://motos.redmotoshn.com/api/v1/auth/user', {
