@@ -5,26 +5,26 @@
   'use strict';
   var canvasSettings = function () {
     const _self = this;
-    $(`${this.containerSelector} .main-panel`).append(`<div class="toolpanel" id="background-panel"><div class="content"><p class="title">Canvas Settings</p></div></div>`);
+    $(`${this.containerSelector} .main-panel`).append(`<div class="toolpanel" id="background-panel"><div class="content"><p class="title">Configuración del Canvas</p></div></div>`);
 
     // set dimension section
     (() => {
       $(`${this.containerSelector} .toolpanel#background-panel .content`).append(`
       <div class="canvas-size-setting">
-        <p>Canvas Size</p>
+        <p>Tamaño</p>
         <div class="input-container">
-          <label>Width</label>
+          <label>Ancho</label>
           <div class="custom-number-input">
           <button class="decrease">-</button>
-          <input type="number" min="100" id="input-width" value="640"/>
+          <input type="number" min="100" id="input-width" value="800"/>
           <button class="increase">+</button>
           </div>
         </div>
         <div class="input-container">
-          <label>Height</label>
+          <label>Alto</label>
           <div class="custom-number-input">
           <button class="decrease">-</button>
-          <input type="number" min="100" id="input-height" value="480"/>
+          <input type="number" min="100" id="input-height" value="600"/>
           <button class="increase">+</button>
           </div>
         </div>
@@ -55,11 +55,11 @@
       <div class="color-settings">
         <div class="tab-container">
           <div class="tabs">
-            <div class="tab-label" data-value="color-fill">Color Fill</div>
-            <div class="tab-label" data-value="gradient-fill">Gradient Fill</div>
+            <div class="tab-label" data-value="color-fill">Color del fondo</div>
+            <div class="tab-label" data-value="gradient-fill">Gradiente</div>
           </div>
           <div class="tab-content" data-value="color-fill">
-            <input id="color-picker" value='black'/><br>
+            <input id="color-picker" value='white'/><br>
           </div>
           <div class="tab-content" data-value="gradient-fill">
             <div id="gradient-picker"></div>

@@ -4,10 +4,11 @@
 (function () {
   'use strict';
 
+  verifyToken();
   /**
    * Image Editor class
    * @param {String} containerSelector jquery selector for image editor container
-   * @param {Array} buttons define toolbar buttons 
+   * @param {Array} buttons define toolbar buttons
    * @param {Array} shapes define shapes
    */
   var ImageEditor = function (containerSelector, buttons, shapes) {
@@ -29,15 +30,19 @@
      */
     this.getCanvasJSON = () => {
       return this.canvas.toJSON();
-    }
+    };
 
     /**
      * Set canvas status by object
      * @param {Object} current the object of fabric canvas status
      */
     this.setCanvasJSON = (current) => {
-      current && this.canvas.loadFromJSON(JSON.parse(current), this.canvas.renderAll.bind(this.canvas))
-    }
+      current &&
+        this.canvas.loadFromJSON(
+          JSON.parse(current),
+          this.canvas.renderAll.bind(this.canvas)
+        );
+    };
 
     /**
      * Event handler to set active tool
@@ -49,8 +54,11 @@
       if (id !== 'select' || (id == 'select' && this.activeSelection)) {
         $(`${containerSelector} .toolpanel#${id}-panel`).addClass('visible');
         if (id === 'select') {
-          console.log('selection')
-          $(`${containerSelector} .toolpanel#${id}-panel`).attr('class', `toolpanel visible type-${this.activeSelection.type}`)
+          console.log('selection');
+          $(`${containerSelector} .toolpanel#${id}-panel`).attr(
+            'class',
+            `toolpanel visible type-${this.activeSelection.type}`
+          );
         }
       }
 
@@ -67,85 +75,97 @@
 
       this.canvas.defaultCursor = 'default';
       this.canvas.selection = true;
-      this.canvas.forEachObject(o => {
+      this.canvas.forEachObject((o) => {
         o.selectable = true;
         o.evented = true;
-      })
+      });
 
       switch (id) {
         case 'draw':
           this.canvas.isDrawingMode = true;
           break;
         case 'line':
-          this.canvas.isDrawingLineMode = true
-          this.canvas.defaultCursor = 'crosshair'
-          this.canvas.selection = false
-          this.canvas.forEachObject(o => {
-            o.selectable = false
-            o.evented = false
+          this.canvas.isDrawingLineMode = true;
+          this.canvas.defaultCursor = 'crosshair';
+          this.canvas.selection = false;
+          this.canvas.forEachObject((o) => {
+            o.selectable = false;
+            o.evented = false;
           });
           break;
         case 'path':
-          this.canvas.isDrawingPathMode = true
-          this.canvas.defaultCursor = 'crosshair'
-          this.canvas.selection = false
-          this.canvas.forEachObject(o => {
-            o.selectable = false
-            o.evented = false
+          this.canvas.isDrawingPathMode = true;
+          this.canvas.defaultCursor = 'crosshair';
+          this.canvas.selection = false;
+          this.canvas.forEachObject((o) => {
+            o.selectable = false;
+            o.evented = false;
           });
-          this.updateTip('Tip: click to place points, press and pull for curves! Click outside or press Esc to cancel!');
+          this.updateTip(
+            'Tip: Haga clic para colocar puntos, presione y tire para curvas! ¡Haga clic fuera o presione Esc para cancelar!'
+          );
           break;
         case 'textbox':
-          this.canvas.isDrawingTextMode = true
-          this.canvas.defaultCursor = 'crosshair'
-          this.canvas.selection = false
-          this.canvas.forEachObject(o => {
-            o.selectable = false
-            o.evented = false
+          this.canvas.isDrawingTextMode = true;
+          this.canvas.defaultCursor = 'crosshair';
+          this.canvas.selection = false;
+          this.canvas.forEachObject((o) => {
+            o.selectable = false;
+            o.evented = false;
           });
           break;
         case 'upload':
           this.openDragDropPanel();
           break;
         default:
-          this.updateTip('Tip: hold Shift when drawing a line for 15° angle jumps!');
+          this.updateTip(
+            'Tip: Mantenga presionada la tecla Mayús al dibujar una línea para saltos en ángulo de 15 °.!'
+          );
           break;
       }
-    }
+    };
 
     /**
      * Event handler when perform undo
      */
     this.undo = () => {
-      console.log('undo')
+      console.log('undo');
       try {
         let undoList = this.history.getValues().undo;
         if (undoList.length) {
           let current = undoList[undoList.length - 1];
           this.history.undo();
-          current && this.canvas.loadFromJSON(JSON.parse(current), this.canvas.renderAll.bind(this.canvas))
+          current &&
+            this.canvas.loadFromJSON(
+              JSON.parse(current),
+              this.canvas.renderAll.bind(this.canvas)
+            );
         }
       } catch (_) {
-        console.error("undo failed")
+        console.error('undo failed');
       }
-    }
+    };
 
     /**
      * Event handler when perform redo
      */
     this.redo = () => {
-      console.log('redo')
+      console.log('redo');
       try {
         let redoList = this.history.getValues().redo;
         if (redoList.length) {
           let current = redoList[redoList.length - 1];
           this.history.redo();
-          current && this.canvas.loadFromJSON(JSON.parse(current), this.canvas.renderAll.bind(this.canvas))
+          current &&
+            this.canvas.loadFromJSON(
+              JSON.parse(current),
+              this.canvas.renderAll.bind(this.canvas)
+            );
         }
       } catch (_) {
-        console.error("redo failed")
+        console.error('redo failed');
       }
-    }
+    };
 
     /**
      * Event handler when select objects on fabric canvas
@@ -154,7 +174,7 @@
     this.setActiveSelection = (activeSelection) => {
       this.activeSelection = activeSelection;
       this.setActiveTool('select');
-    }
+    };
 
     /**
      * Initialize undo/redo stack
@@ -164,34 +184,37 @@
       const ctrZY = (e) => {
         const key = e.which || e.keyCode;
 
-        if (e.ctrlKey && document.querySelectorAll('textarea:focus, input:focus').length === 0) {
-          if (key === 90) this.undo()
-          if (key === 89) this.redo()
+        if (
+          e.ctrlKey &&
+          document.querySelectorAll('textarea:focus, input:focus').length === 0
+        ) {
+          if (key === 90) this.undo();
+          if (key === 89) this.redo();
         }
-      }
-      document.addEventListener('keydown', ctrZY)
-    }
+      };
+      document.addEventListener('keydown', ctrZY);
+    };
 
     /**
      * Initialize zoom events
      */
     this.initializeZoomEvents = () => {
       this.applyZoom = (zoom) => {
-        this.canvas.setZoom(zoom)
-        this.canvas.setWidth(this.canvas.originalW * this.canvas.getZoom())
-        this.canvas.setHeight(this.canvas.originalH * this.canvas.getZoom())
-      }
+        this.canvas.setZoom(zoom);
+        this.canvas.setWidth(this.canvas.originalW * this.canvas.getZoom());
+        this.canvas.setHeight(this.canvas.originalH * this.canvas.getZoom());
+      };
 
       // zoom out/in/reset (ctr + -/+/0)
-      const keyZoom = (e) => zoomWithKeys(e, this.canvas, this.applyZoom)
-      document.addEventListener('keydown', keyZoom)
+      const keyZoom = (e) => zoomWithKeys(e, this.canvas, this.applyZoom);
+      document.addEventListener('keydown', keyZoom);
 
       // zoom out/in with mouse
-      const mouseZoom = (e) => zoomWithMouse(e, this.canvas, this.applyZoom)
+      const mouseZoom = (e) => zoomWithMouse(e, this.canvas, this.applyZoom);
       document.addEventListener('wheel', mouseZoom, {
-        passive: false
-      })
-    }
+        passive: false,
+      });
+    };
 
     /**
      * Initialize image editor
@@ -221,35 +244,39 @@
 
       this.extendHideShowToolPanel();
       this.extendNumberInput();
-    }
+    };
 
     /**
-     * Initialize main panel 
+     * Initialize main panel
      */
     this.initializeMainPanel = () => {
       $(`${containerSelector}`).append('<div class="main-panel"></div>');
-    }
+    };
 
     /**
      * Add features to hide/show tool panel
      */
     this.extendHideShowToolPanel = () => {
       $(`${this.containerSelector} .toolpanel .content`).each(function () {
-        $(this).append(`<div class="hide-show-handler"></div>`)
-      })
+        $(this).append(`<div class="hide-show-handler"></div>`);
+      });
 
-      $(`${this.containerSelector} .toolpanel .content .hide-show-handler`).click(function () {
+      $(
+        `${this.containerSelector} .toolpanel .content .hide-show-handler`
+      ).click(function () {
         let panel = $(this).closest('.toolpanel');
         panel.toggleClass('closed');
-      })
-    }
+      });
+    };
 
     /**
      * Extend custom number input with increase/decrease button
      */
     this.extendNumberInput = () => {
       $(`${containerSelector} .decrease`).click(function () {
-        let input = $(this).closest('.custom-number-input').find('input[type=number]')
+        let input = $(this)
+          .closest('.custom-number-input')
+          .find('input[type=number]');
         let step = input.attr('step');
         if (!step) step = 1;
         else {
@@ -258,9 +285,11 @@
         let val = parseFloat(input.val());
         input.val((val - step).toFixed(step.countDecimals()));
         input.change();
-      })
+      });
       $(`${containerSelector} .increase`).click(function () {
-        let input = $(this).closest('.custom-number-input').find('input[type=number]')
+        let input = $(this)
+          .closest('.custom-number-input')
+          .find('input[type=number]');
         let step = input.attr('step');
         if (!step) step = 1;
         else {
@@ -269,11 +298,31 @@
         let val = parseFloat(input.val());
         input.val((val + step).toFixed(step.countDecimals()));
         input.change();
-      })
-    }
+      });
+    };
 
     this.init();
-  }
+  };
 
   window.ImageEditor = ImageEditor;
 })();
+
+async function verifyToken() {
+  const token = localStorage.getItem('token');
+
+  try {
+    const response = await fetch('https://redmotoshn.com/api/v1/auth/user', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status !== 200) {
+      throw new Error();
+    }
+  } catch (error) {
+    window.location.href = '/';
+    localStorage.clear();
+  }
+}
