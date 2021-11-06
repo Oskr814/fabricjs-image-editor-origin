@@ -322,7 +322,8 @@ async function verifyToken() {
       throw new Error();
     }
   } catch (error) {
+    console.log(error);
     window.location.href = '/';
-    localStorage.clear();
+    sessionStorage.clear();
   }
 }
